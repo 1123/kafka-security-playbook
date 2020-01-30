@@ -13,7 +13,6 @@ RUN yum install -y confluent-kafka-2.11
 
 # 3. Configure Kafka and zookeeper for Kerberos 
 COPY server.properties /etc/kafka/server.properties
-COPY kafka.jaas.config /etc/kafka/kafka_server_jaas.conf
 COPY consumer.properties /etc/kafka/consumer.properties
 
 EXPOSE 9093
