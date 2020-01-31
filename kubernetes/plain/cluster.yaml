@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
   - name: zookeeper
-    image: gcr.io/solutionsarchitect-01/zookeeper-sasl-plain
+    image: gcr.io/${PROJECT}/zookeeper-sasl-plain
     resources:
       limits:
         memory: "1000Mi"
@@ -39,7 +39,7 @@ metadata:
 spec:
   containers:
   - name: kafka
-    image: gcr.io/solutionsarchitect-01/kafka-sasl-plain
+    image: gcr.io/${PROJECT}/kafka-sasl-plain
     resources:
       limits:
         memory: "2000Mi"
