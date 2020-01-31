@@ -8,8 +8,8 @@ COPY confluent.repo /etc/yum.repos.d/confluent.repo
 RUN yum clean all
 
 # 2. Install zookeeper and kafka
-RUN yum install -y java-1.8.0-openjdk
-RUN yum install -y confluent-kafka-2.11
+RUN yum install -y java-11-openjdk
+RUN yum install -y confluent-community-2.12
 
 # 3. Configure Kafka and zookeeper for Kerberos 
 COPY server.properties /etc/kafka/server.properties
