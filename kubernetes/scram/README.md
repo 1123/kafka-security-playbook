@@ -6,7 +6,7 @@
 * some container registry available to push images to
 
 
-#### Build and Deploy
+### Build and Deploy
 
 1. Build the images and deploy them to a container registry, that your cluster has access to. 
    This example uses Google Container Registry for storing the images and Google Cloud Build for building and deploying the images. This is automated by the `build.sh` script:
@@ -39,7 +39,7 @@
        kubectl get pods
        kubectl get services
 
-#### Testing the Deployment
+### Testing the Deployment
 
 1. Produce some sample data. 
 
