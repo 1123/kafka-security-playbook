@@ -1,10 +1,10 @@
 ### Kafka with SASL plain on Kubernetes
 
-This directory contains an example for deploying Confluent Kafka 5.4 with SASL Plain authentication configured to a Kubernetes cluster.
+This directory contains an example for deploying Confluent Kafka 5.4 with SASL Plain authentication configured to a Kubernetes cluster. This example is meant as a learning resource for testing out SASL Plain authentication. For production deployments Confluent Operator will help you to setup a complete cluster with TLS enabled. 
 
 #### Prerequisites
 
-1. kubectl logged into a kubernetes cluster with approximately 8GB of memory. 
+1. The `kubectl` command line tool logged into a kubernetes cluster with approximately 8GB of memory. 
 
 1. A container registry that you can use to upload your images to. 
 
