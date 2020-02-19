@@ -2,9 +2,8 @@
 
 set -e -u 
 
-kubectl delete --force --grace-period=0 -f ldap-cluster-benedikt.yaml ||echo 'WARN: not all resources deleted'
-# ./build.sh
-kubectl apply -f ldap-cluster-benedikt.yaml 
+./build.sh
+helm install cp-ldap -f ldap-chart/values.yaml -n cp-ldap ./ldap-chart
 sleep 5
 ./create-users.sh
 ./create-acls.sh

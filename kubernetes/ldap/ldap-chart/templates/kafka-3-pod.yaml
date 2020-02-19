@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: kafka-3
+  name: kafka-3
+spec:
+  containers:
+  - name: kafka
+    image: "{{ .Values.kafka.image }}"
+    ports:
+    - containerPort: 9093
+    env:
+    - name: KAFKA_ZOOKEEPER_CONNECT
+      value: "zookeeper:2181"
+    - name: KAFKA_BROKER_ID
+      value: "3"
+    - name: KAFKA_ADVERTISED_LISTENERS
+      value: SASL_PLAINTEXT://kafka-3:9093
+    - name: CONFLUENT_METRICS_ENABLE
+      value: 'false'
+    - name: KAFKA_SASL_ENABLED_MECHANISMS
+      value: SCRAM-SHA-256
+    - name: KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL
+      value: SCRAM-SHA-256
+    - name: KAFKA_SECURITY_INTER_BROKER_PROTOCOL
+      value: SASL_PLAINTEXT
+    - name: KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND
+      value: 'false'
+    - name: KAFKA_SUPER_USERS
+      value: User:kafka
+    - name: KAFKA_OPTS
+      value: '-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf'
+    - name: KAFKA_AUTHORIZER_CLASS_NAME
+      value: io.confluent.kafka.security.ldap.authorizer.LdapAuthorizer
+    - name: KAFKA_LDAP_JAVA_NAMING_PROVIDER_URL
+      value: ldap://ldap:389/DC=CONFLUENT,DC=IO
+    - name: KAFKA_LDAP_REFRESH_INTERVAL_MS
+      value: "10000"
+    # Lets try to see if we can run without security
+    - name: KAFKA_LDAP_JAVA_NAMING_SECURITY_AUTHENTICATION
+      value: SIMPLE
+    - name: KAFKA_LDAP_JAVA_NAMING_SECURITY_PRINCIPAL
+      value: cn=admin,dc=confluent,dc=io
+    - name: KAFKA_LDAP_JAVA_NAMING_SECURITY_CREDENTIALS
+      value: admin
+    # Remember that LDAP works in a context. The search base is ou=groups,dc=confluent,dc=io
+    # But since my URL is ldap://ldap:389/DC=CONFLUENT,DC=IO, we are already working in the dc=confluent,dc=io context
+    - name: KAFKA_LDAP_GROUP_SEARCH_BASE
+      value: ou=groups
+    # Object class for groups
+    - name: KAFKA_LDAP_GROUP_OBJECT_CLASS
+      value: posixGroup
+    - name: KAFKA_LDAP_GROUP_SEARCH_SCOPE
+      value: "2"
+    # Name of the attribute from which group name used in ACLs is obtained
+    - name: KAFKA_LDAP_GROUP_NAME_ATTRIBUTE
+      value: cn
+    # Regex pattern to obtain group name used in ACLs from the attribute `ldap.authorizer.group.name.attribute`
+    - name: KAFKA_LDAP_GROUP_NAME_ATTRIBUTE_PATTERN
+      value: ""
+    # Name of the attribute from which group members (user principals) are obtained
+    - name: KAFKA_LDAP_GROUP_MEMBER_ATTRIBUTE
+      value: memberUid
+    # Regex pattern to obtain user principal from group member attribute
+    - name: KAFKA_LDAP_GROUP_MEMBER_ATTRIBUTE_PATTERN
+      value: cn=(.*),ou=users,dc=confluent,dc=io
+
