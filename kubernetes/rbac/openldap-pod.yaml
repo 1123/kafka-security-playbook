@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: openldap
+  name: openldap
+  namespace: rbac
+spec:
+  containers:
+  - name: openldap
+    image: rroemhild/test-openldap
+    ports:
+    - containerPort: 389
+

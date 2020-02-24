@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: rbac
+spec:
+  selector:
+    app: kafka
+  ports:
+    - name: internal
+      protocol: TCP
+      port: 9093
+      targetPort: 9093
+    - name: external
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+    - name: outside
+      protocol: TCP
+      port: 9094
+      targetPort: 9094
+    - name: mds
+      protocol: TCP
+      port: 8090
+      targetPort: 8090
