@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-rest
+  namespace: rbac
+  labels:
+    app: kafka-rest
+spec:
+  containers:
+  - name: kafka-rest
+    image: gcr.io/solutionsarchitect-01/cp-kafka-rest-rbac
+    ports:
+      - containerPort: 8082
+    env:
+    - name: KAFKA_REST_HOST_NAME
+      value: kafka-rest
+    - name: KAFKA_REST_ID
+      value: kafka-rest-test-server
+    - name: KAFKA_REST_DEBUG
+      value: 'true'
+    - name: KAFKA_REST_LISTENERS
+      value: http://0.0.0.0:8082
+      # zookeeper connnect is for validating trial license
+    - name: KAFKA_REST_ZOOKEEPER_CONNECT
+      value: zookeeper:2181
+    - name: KAFKA_REST_BOOTSTRAP_SERVERS
+      value: kafka:9092
+      # =================== Credentials and classpath for cub kafka-ready ====================
+    - name: CUB_CLASSPATH
+      value: '/etc/confluent/docker/docker-utils.jar:/usr/share/java/confluent-security/kafka-rest/*:/usr/share/java/kafka-rest/*'
+    - name: KAFKA_REST_CLIENT_SECURITY_PROTOCOL
+      value: SASL_PLAINTEXT
+    - name: KAFKA_REST_CLIENT_SASL_MECHANISM
+      value: OAUTHBEARER
+    - name: KAFKA_REST_CLIENT_SASL_LOGIN_CALLBACK_HANDLER_CLASS
+      value: io.confluent.kafka.clients.plugins.auth.token.TokenUserLoginCallbackHandler
+    - name: KAFKA_REST_CLIENT_SASL_JAAS_CONFIG
+      value: |
+                                          \
+                                          org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required \
+                                          username="fry" \
+                                          password="fry" \
+                                          metadataServerUrls="http://kafka:8090";
+      # =================== RBAC ==============================
+    - name: KAFKA_REST_KAFKA_REST_RESOURCE_EXTENSION_CLASS
+      value: io.confluent.kafkarest.security.KafkaRestSecurityResourceExtension
+    - name: KAFKA_REST_REST_SERVLET_INITIALIZOR_CLASSES
+      value: io.confluent.common.security.jetty.initializer.InstallBearerOrBasicSecurityHandler
+    - name: KAFKA_REST_PUBLIC_KEY_PATH
+      value: /tmp/conf/public.pem
+    - name: KAFKA_REST_CONFLUENT_METADATA_SERVER_URLS_MAX_AGE_MS
+      value: "60000"
+    - name: KAFKA_REST_CLIENT_CONFLUENT_METADATA_SERVER_URLS_MAX_AGE_MS
+      value: "60000"
+      # how to connect to MDS
+    - name: KAFKA_REST_CONFLUENT_METADATA_BOOTSTRAP_SERVER_URLS
+      value: http://kafka:8090
+    - name: KAFKA_REST_CONFLUENT_METADATA_HTTP_AUTH_CREDENTIALS_PROVIDER
+      value: BASIC
+    - name: KAFKA_REST_CONFLUENT_METADATA_BASIC_AUTH_USER_INFO
+      value: 'fry:fry'
+    - name: KAFKA_REST_SCHEMA_REGISTRY_URL
+      value: 'http://schema-registry:8081'
+

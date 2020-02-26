@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
   - name: control-center
-    image: confluentinc/cp-enterprise-control-center:5.4.0
+    image: gcr.io/solutionsarchitect-01/cp-enterprise-control-center-rbac
     ports:
       - containerPort: 9021
     # volumes:
